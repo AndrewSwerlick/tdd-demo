@@ -20,9 +20,8 @@ class Post < ActiveRecord::Base
   end
 
   def bad_words
-    [
-      [/damn/i,"darn"],
-      [/crap/i,"poop"]
-    ]
+    BadWord.all.map do |word|
+      [/#{word.bad_word}/i, word.replacement]
+    end
   end
 end
