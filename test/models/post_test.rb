@@ -11,58 +11,39 @@
 
 require 'test_helper'
 
-class PostTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+describe Post do
+  describe "when we get the filtered or a post" do
+    let(:post){ Post.new(content: content) }
+    let(:content) { "This is some g-rated content"}
+    let(:post_content){ post.filtered_content }
 
-  test "that we can get the filtered content of a post" do
-    # Arrange
-    post = Post.new
-    post.content = "This is some g-rated content"
+    describe "when the content is g-rated" do
+      let(:content) { "This is some g-rated content"}
 
-    # Act
-    filtered_content = post.filtered_content
+      it "returns the correct content with no changes" do
+        post_content.must_equal content
+      end
+    end
 
-    # Assert
-    assert_not_nil filtered_content
-  end
+    describe "when the content has a bad word in it" do
+      let(:content) {"This content is damn filthy"}
 
-  test "that if there are no swear words the filtered content is the same as normal content" do
-    # Arrange
-    post = Post.new
-    post.content = "This is some g-rated content"
+      it "returns the correct content with no changes" do
+        post_content.must_match "darn"
+        post_content.wont_match "damn"
+      end
+    end
 
-    # Act
-    filtered_content = post.filtered_content
+    describe "when the content has multiple bad words in it" do
+      let(:content) { "Crap this was a damn big mistake" }
 
-    # Assert
-    assert_equal post.content, post.filtered_content
-  end
+      it "returns the correct content with no changes" do
+        post_content.must_match "darn"
+        post_content.wont_match "damn"
 
-  test "that if there is a swear word it gets replaced" do
-    # Arrange
-    post = Post.new
-    post.content = "This content is damn filthy"
-
-    # Act
-    filtered_content = post.filtered_content
-
-    # Assert
-    assert !(filtered_content =~ /damn/), "found damn"
-    assert filtered_content =~ /darn/, "didn't find darn"
-  end
-
-  test "that if there are multiple swear words they get replaced" do
-    # Arrange
-    post = Post.new
-    post.content = "Crap this was a mistake"
-
-    # Act
-    filtered_content = post.filtered_content
-
-    # Assert
-    assert !(filtered_content =~ /crap/i), "found crap"
-    assert filtered_content =~ /poop/i, "didn't find poop"
+        post_content.must_match "poop"
+        post_content.wont_match "crap"
+      end
+    end
   end
 end
