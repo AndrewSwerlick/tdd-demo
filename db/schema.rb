@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141003001813) do
+
+ActiveRecord::Schema.define(version: 20150117203655) do
 
   create_table "bad_words", force: true do |t|
     t.string   "bad_word"

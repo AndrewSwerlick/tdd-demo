@@ -12,38 +12,34 @@
 require 'test_helper'
 
 describe Post do
-  describe "when we get the filtered or a post" do
-    let(:post){ Post.new(content: content) }
-    let(:content) { "This is some g-rated content"}
-    let(:post_content){ post.filtered_content }
+  let(:post) { Post.new(content: content) }
+  let(:result) { post.filtered_content }
 
-    describe "when the content is g-rated" do
-      let(:content) { "This is some g-rated content"}
+  describe "when we get the posts filtered content" do
+    let(:content) { "This is some g rated content" }
 
-      it "returns the correct content with no changes" do
-        post_content.must_equal content
-      end
+    it "gives us the posts content" do
+      result.must_equal post.content
     end
+  end
 
-    describe "when the content has a bad word in it" do
-      let(:content) {"This content is damn filthy"}
+  describe "when we get the posts filtered content when the post has a bad word" do
+    let(:content) { "This is some damn filthy content" }
 
-      it "returns the correct content with no changes" do
-        post_content.must_match "darn"
-        post_content.wont_match "damn"
-      end
+    it "gives us the posts content" do
+      result.wont_match "damn"
+      result.must_match "darn"
     end
+  end
 
-    describe "when the content has multiple bad words in it" do
-      let(:content) { "Crap this was a damn big mistake" }
+  describe "when we have a list of bad words in the database" do
+    before do
+      BadWord.create(bad_word: "crap", replacement: "poop")
+    end
+    let(:content){ "This is crap" }
 
-      it "returns the correct content with no changes" do
-        post_content.must_match "darn"
-        post_content.wont_match "damn"
-
-        post_content.must_match "poop"
-        post_content.wont_match "crap"
-      end
+    it "gives us the posts filtered content" do
+      result.wont_match "crap"
     end
   end
 end

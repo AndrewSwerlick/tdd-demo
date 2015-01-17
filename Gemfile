@@ -41,3 +41,4 @@ gem 'annotate', '~> 2.6.5', group: :development
 # gem 'debugger', group: [:development, :test]
 
 gem 'minitest-spec-rails', group: :test
+gem 'pry'
