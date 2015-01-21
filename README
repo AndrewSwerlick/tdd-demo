@@ -1,3 +1,5 @@
 Very simple application demoing TDD inside of rails.
 
 See slides.pptx for accompanying presentation
+
+To run tests type rake test into the command line
